@@ -6,6 +6,8 @@ console.log(currentDate);
 let currentHour = moment().format("H");
 console.log(currentHour);
 
+
+
 let plannerList = [
   { hour: "8AM", plannedEvent: "" },
   { hour: "9AM", plannedEvent: "" },
@@ -24,47 +26,53 @@ $("#currentDay").append(currentDate);
 
 // function to audit time and determine color
 function auditHour(hour) {
-    let presentTime = moment(currentHour, "H A");
-    let hourSlot = moment(hour, "H A");
-  
-    if (presentTime.isBefore(hourSlot) === true) {
-      return "future";
-    } else if (presentTime.isAfter(hourSlot) === true) {
-      return "past";
-    } else {
-      return "present";
-    }
-  }
+  let presentTime = moment(currentHour, "H A");
+  let hourSlot = moment(hour, "H A");
 
-let loopTracker = 0
+  if (presentTime.isBefore(hourSlot) === true) {
+    return "future";
+  } else if (presentTime.isAfter(hourSlot) === true) {
+    return "past";
+  } else {
+    return "present";
+  }
+}
 
 //function to create planner
-plannerList.forEach(function (plannerListHour) {
-  
+plannerList.forEach(function (plannerListHour, list) {
   let label = plannerListHour.hour;
 
   let auditedEvent = auditHour(label);
 
   // declaration for planner list, including the hour, entered text and save button
   let eventList =
-    '<div class="time-block"><div class="row no-gutters input-group"><div class="col-sm-2 col-lg-1 input-group-prepend hour justify-content-sm-end pr-3 pt-3">' + label +
-    '</div><textarea id=txt'+ loopTracker + ' class="form-control '  + auditedEvent + ' description">' + plannerListHour.plannedEvent + '</textarea><div class="col-sm-2 col-lg-1 input-group-append"><button class="saveBtn btn-block" id=svdbtn' + loopTracker +' type="submit"><i class="far fa-save"></i></button></div></div></div>';
+    '<div class="time-block" id="' +
+    list +
+    '"><div class="row no-gutters input-group"><div class="col-sm-2 col-lg-1 input-group-prepend hour justify-content-sm-end pr-3 pt-3">' +
+    label +
+    '</div><textarea class="form-control ' +
+    auditedEvent +
+    ' description">' +
+    plannerListHour.plannedEvent +
+    '</textarea><div class="col-sm-2 col-lg-1 input-group-append"><button class="saveBtn btn-block" type="submit"><i class="far fa-save"></i></button></div></div></div>';
 
   // add rows to page
   $(".container").append(eventList);
 });
 
+let storageCheck =JSON.parse(localStorage.getItem("enteredTxt"));
+
+if (storageCheck !== null) {
+  plannerList = storageCheck;
+}
 
 // day planner save button clicked
 $(".saveBtn").on("click", function () {
-  let savedHour = $(this).attr("id");
-  // console.log(savedHour);
-  savedHour = savedHour[savedHour.length - 1]
-  let svdtxt = $("txt" + savedHour).val()
-  console.log(svdtxt)
-  plannerList[savedHour].plannedEvent = $("txt" + savedHour).val()
-  console.log(plannerList)
-  // [$(this).id.length - 1]
-  // localStorage.setItem(()JSON.stringify())
   console.log("You clicked the button!");
+  var eventRow = parseInt($(this).closest(".time-block").attr("id"));
+  var svdTxt = $.trim($(this).parent().siblings("textarea").val());
+
+  plannerList[eventRow].plannedEvent = svdTxt;
+  localStorage.setItem("enteredTxt",JSON.stringify(plannerList));
 });
+
