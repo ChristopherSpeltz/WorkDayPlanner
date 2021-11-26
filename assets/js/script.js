@@ -5,21 +5,24 @@ console.log(currentDate);
 // declaration for current hour
 let currentHour = moment().format("H");
 console.log(currentHour);
+let plannerList;
 
-
-
-let plannerList = [
-  { hour: "8AM", plannedEvent: "" },
-  { hour: "9AM", plannedEvent: "" },
-  { hour: "10AM", plannedEvent: "" },
-  { hour: "11AM", plannedEvent: "" },
-  { hour: "12PM", plannedEvent: "" },
-  { hour: "1PM", plannedEvent: "" },
-  { hour: "2PM", plannedEvent: "" },
-  { hour: "3PM", plannedEvent: "" },
-  { hour: "4PM", plannedEvent: "" },
-  { hour: "5PM", plannedEvent: "" },
-];
+if(localStorage.getItem("enteredTxt")){
+  plannerList = JSON.parse(localStorage.getItem("enteredTxt"))
+}else{
+  plannerList = [
+    { hour: "8AM", plannedEvent: "" },
+    { hour: "9AM", plannedEvent: "" },
+    { hour: "10AM", plannedEvent: "" },
+    { hour: "11AM", plannedEvent: "" },
+    { hour: "12PM", plannedEvent: "" },
+    { hour: "1PM", plannedEvent: "" },
+    { hour: "2PM", plannedEvent: "" },
+    { hour: "3PM", plannedEvent: "" },
+    { hour: "4PM", plannedEvent: "" },
+    { hour: "5PM", plannedEvent: "" },
+  ];
+}
 
 // add current date  header
 $("#currentDay").append(currentDate);
